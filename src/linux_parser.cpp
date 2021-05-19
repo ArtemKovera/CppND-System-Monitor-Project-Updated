@@ -134,25 +134,18 @@ int LinuxParser::TotalProcesses()
 
     if(file.is_open())
     {
-        int value;
         int totalProcesses;
         string line;
-        string key;
         bool found = false;
 
         while(std::getline(file, line) && !found)
         {
-            std::istringstream lineStream(line);
-
-            while (lineStream >> key >> value)
-            {
-                if(key == "processes")
-                {
-                    totalProcesses = value;  
-                    found = true;              
-                }
-                file.close();                
-                return totalProcesses; 
+            if(line.find("processes") != string::npos)
+            {   
+                found = true;
+                const char * str = line.c_str();
+                totalProcesses = atoi(str+10); 
+                return totalProcesses;
             }
         }
 
