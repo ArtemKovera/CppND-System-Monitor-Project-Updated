@@ -70,15 +70,14 @@ vector<int> LinuxParser::Pids() {
 // returns 0 if file is unable to open
 float LinuxParser::MemoryUtilization()
 {
-    float totalMemory;
-    float freeMemory;
-    float value;
-
     std::ifstream file(kProcDirectory + kMeminfoFilename);
 
     
     if(file.is_open()) 
-    {
+    {   
+        float totalMemory;
+        float freeMemory;
+        float value;
         string line;
         string key;
         while (std::getline(file, line)) 
