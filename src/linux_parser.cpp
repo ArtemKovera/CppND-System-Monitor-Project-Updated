@@ -80,6 +80,7 @@ float LinuxParser::MemoryUtilization()
         float value;
         string line;
         string key;
+        
         while (std::getline(file, line)) 
         {
             std::istringstream lineStream(line);
@@ -126,7 +127,41 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
+// returns 0 if the file is unable to open 
+int LinuxParser::TotalProcesses() 
+{ 
+    std::ifstream file(kProcDirectory + kStatFilename);
+
+    if(file.is_open())
+    {
+        int value;
+        int totalProcesses;
+        string line;
+        string key;
+        bool found = false;
+
+        while(std::getline(file, line) && !found)
+        {
+            std::istringstream lineStream(line);
+
+            while (lineStream >> key >> value)
+            {
+                if(key == "processes")
+                {
+                    totalProcesses = value;  
+                    found = true;              
+                }
+                return totalProcesses; 
+            }
+        }
+
+    }
+    else
+    {
+        return 0;
+    }
+    
+}
 
 // TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() { return 0; }
