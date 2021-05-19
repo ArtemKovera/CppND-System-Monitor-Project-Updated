@@ -28,7 +28,7 @@ std::string System::Kernel()
 }
 
 // TODO: Return the system's memory utilization
-// returns 0 if file is unable to open
+// returns 0 if the file is unable to open or information is not found 
 float System::MemoryUtilization() 
 { 
     return LinuxParser::MemoryUtilization();
@@ -41,7 +41,11 @@ std::string System::OperatingSystem()
 }
 
 // TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { return 0; }
+// returns 0 if the file is unable to open or information is not found 
+int System::RunningProcesses() 
+{  
+    return LinuxParser::RunningProcesses();
+}
 
 // TODO: Return the total number of processes on the system
 // returns 0 if the file is unable to open 
