@@ -214,12 +214,82 @@ string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) 
+{ 
+
+    std::ifstream file(kProcDirectory + to_string(pid) + kStatusFilename);
+    if(file.is_open())
+    {
+        std::string key, line, value, uid;
+        bool found = false;
+        while(std::getline(file, line) && !found)
+        {
+            std::istringstream stream(line);
+            while(stream >> key >> value)
+            {
+                if(key == "Uid:")
+                {
+                    uid = value;
+                    found = true;
+                }
+                   
+            }
+        }
+
+        return uid;
+    }
+    else
+    {
+        return "";
+    }
+    
+}
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(int pid)
+{ 
+    std::ifstream file(kPasswordPath);
+    if(file.is_open())
+    {
+        string line, key, x, value, user; 
+        bool found = false;
+        string uid = Uid(pid);
+        while(std::getline(file, line) && !found)
+        {
+            std::replace(line.begin(), line.end(), ':', ' ');
+            std::istringstream stream(line);
+            while(stream >> key >> x >> value)
+            if(value == uid)
+            {
+                user = key;
+                found = true;
+            }
+        }
+
+        return user;
+    }
+    else
+    {
+        return "";
+    }
+    
+}
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::UpTime(int pid) 
+{ 
+    std::ifstream file(kProcDirectory + std::to_string(pid) + kUptimeFilename);
+    if(file.is_open())
+    {
+        string line; 
+        std::getline(file, line);
+        if(line == "")
+            return 0;
+        
+        return stol(line);
+    }
+    
+    return 0;
+}
