@@ -232,15 +232,17 @@ string LinuxParser::Ram(int pid)
         string line, key, value;
         while (std::getline(file, line)) 
         {
-            std::replace(line.begin(), line.end(), ':', ' ');
             std::istringstream lineStream(line);
             while (lineStream >> key >> value) 
             {
-                if (key == "VmSize") 
-                file.close();
-                return value;
+                if (key == "VmSize:") 
+                {
+                    file.close();
+                    return value;
+                }
             }
         }
+
     }      
     else
     {
