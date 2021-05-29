@@ -22,6 +22,7 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() 
 {   
     const vector<int>& pids = LinuxParser::Pids();
+    processes_.clear(); 
     for (int pid : pids)
     {
         Process process(pid);
