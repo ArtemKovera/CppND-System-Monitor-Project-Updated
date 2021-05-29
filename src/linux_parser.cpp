@@ -376,7 +376,7 @@ long LinuxParser::UpTime(int pid)
             count++;    
         }
         file.close();
-        return value;
+        return LinuxParser::UpTime() - value / sysconf(_SC_CLK_TCK);
     }
     else
     {
